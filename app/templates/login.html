@@ -1,0 +1,23 @@
+<!--AQUI SE LOGEARA EL USUARIO (USUARIO YA REGISTRADO)-->
+{% extends 'base.html' %}
+
+{% block title %} Logearse {% endblock %}
+
+{% block content %}
+    <h2>Logeate!</h2>
+    <form action="{{ url_for('main.login') }}" method="post">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Iniciar sesion</button>
+
+    </form>
+{% endblock %}

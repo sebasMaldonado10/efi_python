@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %} 
+    <h2>Ultimos Posts</h2>
+    {% if posts %} <!--si hay posts...-->
+        {% for post in posts %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"> {{ post.titulo }}</h5>
+                    <h6 class="card-subtitle"> {{ post.fecha_creacion.strftime('%d/%m/%Y') }} </h6>
+                    <p class="card-text"> {{ post.contenido }}</p>
+                    <!--boton para comentar-->
+                    <!--boton para comentar-->
+                    <a href="{{ url_for('main.ver_post', post_id=post.id) }}" class="btn btn-primary">Comentar</a>
+                    <!--editar y eliminar solo para el autor--> 
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h2>No hay posts para mostrar</h2>
+    {% endif %}
+{% endblock %}

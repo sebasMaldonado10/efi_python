@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <!-- Aquí vamos a ir agregando el contenido -->
+    <h2>{{ post.titulo }}</h2>
+    <p>{{ post.contenido }}</p>
+    <hr>
+    <h4>Comentarios:</h4>
+    <ul>
+        {% for comentario in post.comentarios %}
+            <li>{{ comentario.texto }}</li>
+        {% else %}
+            <li>No hay comentarios aún.</li>
+        {% endfor %}
+    </ul>
+    <hr>
+    {% if current_user.is_authenticated %}
+        <h4>Agregar un comentario:</h4>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div>
+            {{ form.texto.label }}<br>
+            {{ form.texto(size=40) }}
+            </div>
+            <br>
+            <button type="submit">Comentar</button>
+        </form>
+    {% else %}
+        <p><a href="{{ url_for('main.login') }}">Inicia sesión</a> para comentar.</p>
+    {% endif %}
+
+{% endblock %}
+

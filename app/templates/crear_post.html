@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Post{% endblock %}
+
+{% block content %}
+    <h2>Crea Tu Post!!!</h2>
+
+    <form action="{{ url_for('main.crear_post') }}" method="POST">
+        <div class="mb-3"> <!--clase de Bootstrap-->
+            <input type="text" name="titulo" id="titulo" class="form-control" placeholder="Escriba el título" required>
+        </div>
+        <div class="mb-3">
+            <textarea name="contenido" id="contenido" class="form-control" rows="5" placeholder="Escribe el contenido" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Publicar</button>
+    </form>
+{% endblock %}

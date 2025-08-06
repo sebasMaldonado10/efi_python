@@ -1,0 +1,27 @@
+<!--AQUI SE REGISTRARA EL USUARIO POR PRIMERA VEZ-->
+{% extends 'base.html' %}
+
+{% block title %} Registrarse {% endblock %}
+
+{% block content %}
+    <h2>Registrate!</h2>
+    <form action="{{ url_for('main.registro') }}" method="post">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.username.label(class="form-label") }}
+            {{ form.username(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Registrarse</button>
+
+    </form>
+{% endblock %}
