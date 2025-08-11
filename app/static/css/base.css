@@ -1,0 +1,98 @@
+/* ===== VARIABLES ===== */
+:root {
+    --color-fondo: #f4f4f4;
+    --color-principal: #6c63ff;
+    --color-secundario: #ff6f61;
+    --color-texto: #333;
+    --color-footer: #222;
+    --color-navbar: #fff;
+}
+
+/* ===== BODY Y TIPOGRAFÍA ===== */
+body {
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    background-color: var(--color-navbar) !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: var(--color-principal) !important;
+}
+
+.navbar-nav .nav-link {
+    color: var(--color-texto) !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--color-principal) !important;
+}
+
+/* ===== POSTS ===== */
+.card {
+    border: none;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.card-title {
+    color: var(--color-principal);
+}
+
+.card-text {
+    color: var(--color-texto);
+}
+
+/* ===== BOTONES ===== */
+.btn-primary {
+    background-color: var(--color-principal);
+    border-color: var(--color-principal);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-secundario);
+    border-color: var(--color-secundario);
+}
+
+/* ===== FOOTER ===== */
+footer {
+    background-color: var(--color-footer);
+    color: #fff;
+    padding: 2rem 0;
+    text-align: center;
+}
+
+footer a {
+    color: var(--color-principal);
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: var(--color-secundario);
+}
+
+/* ===== FORMULARIOS ===== */
+form {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+input, textarea {
+    border-radius: 0.5rem !important;
+}
