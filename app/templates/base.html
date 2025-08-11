@@ -22,6 +22,20 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('main.home') }}">Home</a>
         </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Categorías
+          </a>
+          <ul class="dropdown-menu">
+            {% for cat in categorias %}
+              <li>
+                <a class="dropdown-item" href="{{ url_for('main.filtrar_categoria', categoria_id=cat.id) }}">
+                  {{ cat.nombre }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
 
         {% if current_user.is_authenticated %}
           <li class="nav-item">

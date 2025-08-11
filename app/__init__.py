@@ -25,6 +25,11 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return Usuario.query.get(int(user_id))
+    
+    @app.context_processor
+    def inyectar_categorias():
+        categorias = Categoria.query.all()
+        return dict(categorias=categorias)
 
     from .routes import main
     app.register_blueprint(main)

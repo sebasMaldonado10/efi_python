@@ -12,6 +12,16 @@
         <div class="mb-3">
             <textarea name="contenido" id="contenido" class="form-control" rows="5" placeholder="Escribe el contenido" required></textarea>
         </div>
+
+        <div class="mb-3">
+            <label for="categorias" class="form-label">Categorías</label>
+            <select name="categorias" id="categorias" class="form-select" multiple required>
+                {% for cat in categorias %}
+                    <option value="{{ cat.id }}">{{ cat.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
         <button type="submit" class="btn btn-primary">Publicar</button>
     </form>
 {% endblock %}

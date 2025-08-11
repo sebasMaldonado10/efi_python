@@ -6,7 +6,7 @@ from flask_login import UserMixin
 post_categoria = db.Table('post_categoria',
     db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), primary_key=True),
     db.Column('categoria_id', db.Integer, db.ForeignKey('categorias.id'), primary_key=True)
-)
+) #un post puede tener varias categorias y una categoria puede estar en muchos posts(m a m).
 
 class Usuario(db.Model, UserMixin):
     __tablename__ = 'usuarios'
@@ -27,7 +27,7 @@ class Post(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
 
     comentarios = db.relationship('Comentario', backref='post', lazy=True)
-    categorias = db.relationship('Categoria', secondary=post_categoria, backref='posts', lazy='dynamic')
+    categorias = db.relationship('Categoria', secondary=post_categoria, backref=db.backref('posts', lazy='dynamic'), lazy='dynamic')
 
 class Comentario(db.Model):
     __tablename__ = 'comentarios'

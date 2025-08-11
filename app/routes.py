@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from app.models import Post, Usuario, Comentario, db
+from app.models import Post, Usuario, Comentario, Categoria, db
 from app.forms import RegistroForm, LoginForm, ComentarioForm
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -11,6 +11,12 @@ def home():
     posts = Post.query.order_by(Post.fecha_creacion.desc()).all()
     return render_template('home.html', posts=posts)
 
+@main.route('/categoria/<int:categoria_id>')
+def filtrar_categoria(categoria_id):
+    categoria = Categoria.query.get_or_404(categoria_id)
+    posts = categoria.posts.order_by(Post.fecha_creacion.desc()).all()
+    return render_template('posts_por_categoria.html', posts=posts, categoria=categoria)
+
 
 #GET para mostrar el formulario vacio
 #POST para recibir los datos del formulario cuando se envia
@@ -20,8 +26,14 @@ def crear_post():
     if request.method =='POST':
         titulo = request.form['titulo']
         contenido = request.form['contenido']
+        categorias_ids = request.form.getlist('categorias')  # Lista de IDs seleccionados
 
         nuevo_post = Post(titulo=titulo, contenido=contenido, usuario_id=current_user.id) #Asocia el post al usuario creado
+        
+        if categorias_ids:
+            categorias_seleccionadas = Categoria.query.filter(Categoria.id.in_(categorias_ids)).all()
+            nuevo_post.categorias = categorias_seleccionadas
+            
         db.session.add(nuevo_post)
         db.session.commit()
 
