@@ -42,6 +42,35 @@ def crear_post():
     
     return render_template('crear_post.html')
 
+@main.route('/editar_post/<int:post_id>', methods=['GET', 'POST'])
+@login_required
+def editar_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    if request.method == 'POST':
+        post.titulo = request.form['titulo']
+        post.contenido = request.form['contenido']
+        db.session.commit()
+        flash('¡Post editado con éxito!')
+        return redirect(url_for('main.home'))
+
+    return render_template('editar_post.html', post=post)
+
+
+@main.route('/eliminar_post/<int:post_id>', methods=[ 'POST'])
+@login_required
+def eliminar_post(post_id):
+    post = Post.query.get_or_404(post_id)
+
+    if post.usuario_id != current_user.id:
+        flash('No tenés permiso para eliminar este post')
+        return redirect(url_for('main.home'))
+     
+    db.session.delete(post)
+    db.session.commit()
+    flash('Post eliminado con éxito.')
+    return redirect(url_for('main.home'))
+
 @main.route('/registro',methods=['GET','POST'])
 def registro():
     form = RegistroForm()

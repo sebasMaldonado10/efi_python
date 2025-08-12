@@ -14,7 +14,20 @@
                     <!--boton para comentar-->
                     <!--boton para comentar-->
                     <a href="{{ url_for('main.ver_post', post_id=post.id) }}" class="btn btn-primary">Comentar</a>
-                    <!--editar y eliminar solo para el autor--> 
+                    <!--editar y eliminar solo para el autor-->
+                    {% if current_user.is_authenticated and current_user.id == post.usuario_id %}
+                        <a href="{{ url_for('main.editar_post', post_id=post.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                    <!-- Botón Eliminar -->
+                        <form action="{{ url_for('main.eliminar_post', post_id=post.id) }}" 
+                              method="POST" 
+                              style="display:inline; background: transparent; padding: 0; margin: 0;">
+                            <button type="submit" 
+                                    class="btn btn-danger btn-sm" 
+                                    onclick="return confirm('¿Seguro que querés eliminar este post?');">
+                               Eliminar
+                            </button>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

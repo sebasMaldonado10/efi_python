@@ -26,7 +26,7 @@ class Post(db.Model):
     fecha_creacion = db.Column(db.DateTime, default=datetime.now)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
 
-    comentarios = db.relationship('Comentario', backref='post', lazy=True)
+    comentarios = db.relationship('Comentario', backref='post', lazy=True, cascade='all, delete-orphan')
     categorias = db.relationship('Categoria', secondary=post_categoria, backref=db.backref('posts', lazy='dynamic'), lazy='dynamic')
 
 class Comentario(db.Model):
