@@ -1,0 +1,26 @@
+# Python / Flask
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+instance/
+.env
+.env.*
+*.sqlite3
+
+# Entornos / herramientas
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.coverage
+dist/
+build/
+
+# IDEs/editores
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
