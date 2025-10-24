@@ -24,3 +24,11 @@ build/
 # Sistema
 .DS_Store
 Thumbs.db
+enviroment/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+instance/
+
