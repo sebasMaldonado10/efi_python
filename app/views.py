@@ -60,7 +60,7 @@ class RegisterAPI(MethodView):
             return jsonify({"msg": "El nombre de usuario o email ya existe."}), 409
 
         u = Usuario(username=data["username"], email=data["email"], role="user", is_active=True)
-        cred = UserCredentials(usuario=u, password_hash=bcrypt.hash(data["password"]), role="user")
+        cred = UserCredentials(usuario=u, password_hash=bcrypt.hash(data["password"]))
         db.session.add_all([u, cred])
         db.session.commit()
 
