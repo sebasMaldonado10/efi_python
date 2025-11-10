@@ -29,11 +29,16 @@ class UserCredentials(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
-    role = db.Column(db.String(20), nullable=False, default='user') #roles: user, admin, moderator
+    
     usuario = db.relationship("Usuario", back_populates="credenciales")
+
     @staticmethod
-    def hash_pwd(p): return bcrypt.hash(p)
-    def check_pwd(self, p): return bcrypt.verify(p, self.password_hash)
+    def hash_pwd(password):
+        return bcrypt.hash(password)
+
+    def check_pwd(self, password):
+        return bcrypt.verify(password, self.password_hash)
+
 
 class Post(db.Model):
     __tablename__ = 'posts'
