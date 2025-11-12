@@ -43,7 +43,6 @@ def owns(owner_id: int) -> bool:
         uid = get_jwt_identity()
     return is_admin() or owner_id == uid
 
-
 # =======================
 #          AUTH
 # =======================
@@ -96,7 +95,7 @@ class LoginAPI(MethodView):
             return jsonify({"msg": "Credenciales inválidas."}), 401
 
         # identity como string (el ID del usuario)
-        identity = str(usuario.id)
+        identity = str(usuario.id) 
         claims   = {
             "role": usuario.role,
             "email": usuario.email,
