@@ -37,22 +37,11 @@ def is_admin() -> bool:
     return get_jwt().get("role") == "admin"
 
 def owns(owner_id: int) -> bool:
-    ident = get_jwt_identity() or {}
-    # si usás identity dict -> {"user_id": ..., "email": ...}
-    uid = ident["user_id"] if isinstance(ident, dict) else ident
+    try:
+        uid = int(get_jwt_identity())  # lo pasamos a int para comparar
+    except (TypeError, ValueError):
+        uid = get_jwt_identity()
     return is_admin() or owner_id == uid
-
-
-# =======================
-#          AUTH
-# =======================
-from flask import request, jsonify
-from flask.views import MethodView
-from marshmallow import ValidationError
-from passlib.hash import bcrypt
-from app import db
-from app.models import Usuario, UserCredentials
-from app.schemas import RegisterSchema, UsuarioSchema
 
 
 # =======================
@@ -244,23 +233,6 @@ class CommentDeleteAPI(MethodView):
         db.session.delete(c); db.session.commit()
         return "", 204
 
-class CommentUpdateAPI(MethodView):
-    @jwt_required()
-    def put(self, comment_id):
-        c = Comentario.query.get_or_404(comment_id)
-        uid = int(get_jwt_identity())
-        role = get_jwt().get("role")
-
-        # Solo autor, moderator o admin pueden editar
-        if c.usuario_id != uid and role not in ("moderator", "admin"):
-            return jsonify({"msg": "No autorizado"}), 403
-
-        data = request.get_json() or {}
-        c.texto = data.get("texto", c.texto)
-        db.session.commit()
-        return ComentarioSchema().dump(c), 200
-    
-
 
 # ======== CATEGORÍAS ========
 
@@ -386,11 +358,4 @@ class StatsAPI(MethodView):
             resp["posts_last_week"] = posts_last_week
         return jsonify(resp), 200
 
-# ======== REVIEWS (solo admin/moderator) ========
-class ReviewsAllAPI(MethodView):
-    @jwt_required()
-    @role_required("admin", "moderator")
-    def get(self):
-        reviews = Comentario.query.order_by(Comentario.fecha_creacion.desc()).all()
-        return jsonify(ComentarioSchema(many=True).dump(reviews)), 200
 
