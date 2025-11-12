@@ -1,44 +1,19 @@
-# Python / Flask
-__pycache__/
-*.py[cod]
-*.so
-*.egg-info/
-instance/
-.env
-.env.*
-*.sqlite3
-
-# Entornos / herramientas
-.venv/
-venv/
-.pytest_cache/
-.mypy_cache/
-.coverage
-dist/
-build/
-
-# IDEs/editores
-.vscode/
-.idea/
-
-# Sistema
-.DS_Store
-Thumbs.db
-enviroment/
-.venv/
-venv/
-__pycache__/
-*.pyc
-.env
-instance/
-
-# Ignorar entorno virtual
+# Ignorar entorno virtual y archivos de Python
 enviroment/
 venv/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# Ignorar archivos temporales y de entorno
+.env
 *.db
 *.sqlite3
 .DS_Store
+.idea/
+.vscode/
+
+# Carpeta de instancia (bases de datos locales, etc.)
+instance/
+
