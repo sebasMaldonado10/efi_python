@@ -39,6 +39,7 @@ def cargar_usuarios():
         existe = Usuario.query.filter_by(email=email).first()
         if not existe:
             u = Usuario(username=username, email=email, role=rol)
+            password_segura = pwd[:72]
             cred = UserCredentials(usuario=u, password_hash=bcrypt.hash(pwd))
             db.session.add_all([u, cred])
     db.session.commit()

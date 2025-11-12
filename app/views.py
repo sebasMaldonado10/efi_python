@@ -46,25 +46,51 @@ def owns(owner_id: int) -> bool:
 # =======================
 #          AUTH
 # =======================
+from flask import request, jsonify
+from flask.views import MethodView
+from marshmallow import ValidationError
+from passlib.hash import bcrypt
+from app import db
+from app.models import Usuario, UserCredentials
+from app.schemas import RegisterSchema, UsuarioSchema
+
+
+# =======================
+#          AUTH
+# =======================
 class RegisterAPI(MethodView):
     def post(self):
         try:
             data = RegisterSchema().load(request.get_json() or {})
+            print("📩 Datos recibidos:", data)
         except ValidationError as err:
+            print("❌ Errores de validación:", err.messages)
             return jsonify({"errors": err.messages}), 422
 
+        # Verificar si ya existe usuario o email
         existe = Usuario.query.filter(
             (Usuario.username == data["username"]) | (Usuario.email == data["email"])
         ).first()
         if existe:
             return jsonify({"msg": "El nombre de usuario o email ya existe."}), 409
 
-        u = Usuario(username=data["username"], email=data["email"], role="user", is_active=True)
+        # Crear usuario con el rol correspondiente
+        u = Usuario(
+            username=data["username"],
+            email=data["email"],
+            role=data.get("role", "user"),
+            is_active=True,
+        )
+
+        # Crear credenciales (sin role, solo el hash)
         cred = UserCredentials(usuario=u, password_hash=bcrypt.hash(data["password"]))
+
         db.session.add_all([u, cred])
         db.session.commit()
 
+        print("✅ Usuario creado correctamente:", u.username, "-", u.role)
         return UsuarioSchema().dump(u), 201
+
 
 
 class LoginAPI(MethodView):
@@ -218,6 +244,23 @@ class CommentDeleteAPI(MethodView):
         db.session.delete(c); db.session.commit()
         return "", 204
 
+class CommentUpdateAPI(MethodView):
+    @jwt_required()
+    def put(self, comment_id):
+        c = Comentario.query.get_or_404(comment_id)
+        uid = int(get_jwt_identity())
+        role = get_jwt().get("role")
+
+        # Solo autor, moderator o admin pueden editar
+        if c.usuario_id != uid and role not in ("moderator", "admin"):
+            return jsonify({"msg": "No autorizado"}), 403
+
+        data = request.get_json() or {}
+        c.texto = data.get("texto", c.texto)
+        db.session.commit()
+        return ComentarioSchema().dump(c), 200
+    
+
 
 # ======== CATEGORÍAS ========
 
@@ -342,4 +385,12 @@ class StatsAPI(MethodView):
             ) or 0
             resp["posts_last_week"] = posts_last_week
         return jsonify(resp), 200
+
+# ======== REVIEWS (solo admin/moderator) ========
+class ReviewsAllAPI(MethodView):
+    @jwt_required()
+    @role_required("admin", "moderator")
+    def get(self):
+        reviews = Comentario.query.order_by(Comentario.fecha_creacion.desc()).all()
+        return jsonify(ComentarioSchema(many=True).dump(reviews)), 200
 
