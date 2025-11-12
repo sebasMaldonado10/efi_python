@@ -4,6 +4,9 @@ Este proyecto implementa una **API REST** desarrollada con **Flask**, que gestio
 Incluye autenticación con **JWT (Bearer Token)** y un sistema de **roles (user, moderator, admin)** para controlar permisos.
 
 ---
+## Integrantes
+- Mateo Urquiza
+- Sebastian Maldonado
 
 ## 🚀 Tecnologías principales
 - Python 3.12  
