@@ -5,13 +5,15 @@ from app.views import (
     # Posts
     PostListAPI, PostDetailAPI,
     # Comentarios
-    CommentListAPI, CommentDeleteAPI,
+    CommentListAPI, CommentDeleteAPI, CommentUpdateAPI,
     # Categorías
     CategoryListAPI, CategoryDetailAPI,
     # Usuarios (admin)
     UserListAPI, UserDetailAPI,
     # Stats
-    StatsAPI
+    StatsAPI,
+    # Reviews global
+    ReviewsAllAPI
 )
 
 def register_routes(app):
@@ -27,6 +29,7 @@ def register_routes(app):
     # ---- Comentarios ----
     app.add_url_rule("/api/posts/<int:post_id>/comments", view_func=CommentListAPI.as_view("comment_list"))
     app.add_url_rule("/api/comments/<int:comment_id>", view_func=CommentDeleteAPI.as_view("comment_delete"))
+    app.add_url_rule("/api/comments/<int:comment_id>/edit", view_func=CommentUpdateAPI.as_view("comment_update"))
 
     # ---- Categorías ----
     app.add_url_rule("/api/categories", view_func=CategoryListAPI.as_view("category_list"))
@@ -38,4 +41,7 @@ def register_routes(app):
 
     # ---- Stats ----
     app.add_url_rule("/api/stats", view_func=StatsAPI.as_view("stats"))
+
+    # ---- Reviews global ----
+    app.add_url_rule("/api/reviews", view_func=ReviewsAllAPI.as_view("reviews_all"))
 

@@ -231,6 +231,22 @@ class CommentDeleteAPI(MethodView):
 
         db.session.delete(c); db.session.commit()
         return "", 204
+    
+class CommentUpdateAPI(MethodView):
+    @jwt_required()
+    def put(self, comment_id):
+        c = Comentario.query.get_or_404(comment_id)
+        uid = int(get_jwt_identity())
+        role = get_jwt().get("role")
+
+        # Solo autor, moderator o admin pueden editar
+        if c.usuario_id != uid and role not in ("moderator", "admin"):
+            return jsonify({"msg": "No autorizado"}), 403
+
+        data = request.get_json() or {}
+        c.texto = data.get("texto", c.texto)
+        db.session.commit()
+        return ComentarioSchema().dump(c), 200
 
 
 # ======== CATEGORÍAS ========
@@ -357,4 +373,11 @@ class StatsAPI(MethodView):
             resp["posts_last_week"] = posts_last_week
         return jsonify(resp), 200
 
+# ====REVIEWS====
+class ReviewsAllAPI(MethodView):
+    @jwt_required()
+    @role_required("admin", "moderator")
+    def get(self):
+        reviews = Comentario.query.order_by(Comentario.fecha_creacion.desc()).all()
+        return jsonify(ComentarioSchema(many=True).dump(reviews)), 200
 
